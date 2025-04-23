@@ -1,48 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Rep Territory Map</title>
+  <title>Rep Territory Map (Free)</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    #map { height: 100vh; width: 100%; }
+    #map { height: 100vh; }
   </style>
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
-  <script>
-    function initMap() {
-      const center = { lat: 39.8283, lng: -98.5795 }; // Center of USA
-      const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 5,
-        center: center,
-      });
-
-      // Example Accounts with lat/lng (replace with dynamic data from Salesforce)
-      const accounts = [
-        { name: "ABC Construction", lat: 34.0522, lng: -118.2437, status: "Active" },
-        { name: "Delta Cooling", lat: 29.7604, lng: -95.3698, status: "Opportunity" },
-        { name: "Chiller Pros", lat: 40.7128, lng: -74.0060, status: "Lead" },
-      ];
-
-      accounts.forEach(acc => {
-        const marker = new google.maps.Marker({
-          position: { lat: acc.lat, lng: acc.lng },
-          map,
-          title: acc.name,
-          label: acc.status.charAt(0),
-        });
-
-        const info = new google.maps.InfoWindow({
-          content: `<strong>${acc.name}</strong><br>Status: ${acc.status}`
-        });
-
-        marker.addListener("click", () => {
-          info.open(map, marker);
-        });
-      });
-    }
-
-    window.onload = initMap;
-  </script>
 </head>
 <body>
   <div id="map"></div>
+  <script>
+    const map = L.map('map').setView([39.5, -98.35], 4); // Center US
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data © OpenStreetMap contributors'
+    }).addTo(map);
+
+    const reps = [
+      { name: "Rep 1", lat: 40.7128, lon: -74.0060, city: "New York" },
+      { name: "Rep 2", lat: 34.0522, lon: -118.2437, city: "Los Angeles" },
+      { name: "Rep 3", lat: 41.8781, lon: -87.6298, city: "Chicago" }
+    ];
+
+    reps.forEach(rep => {
+      L.marker([rep.lat, rep.lon])
+        .addTo(map)
+        .bindPopup(`<strong>${rep.name}</strong><br>${rep.city}`);
+    });
+  </script>
 </body>
 </html>
