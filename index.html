@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rep Territory Map</title>
+  <style>
+    #map { height: 100vh; width: 100%; }
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+  <script>
+    function initMap() {
+      const center = { lat: 39.8283, lng: -98.5795 }; // Center of USA
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 5,
+        center: center,
+      });
+
+      // Example Accounts with lat/lng (replace with dynamic data from Salesforce)
+      const accounts = [
+        { name: "ABC Construction", lat: 34.0522, lng: -118.2437, status: "Active" },
+        { name: "Delta Cooling", lat: 29.7604, lng: -95.3698, status: "Opportunity" },
+        { name: "Chiller Pros", lat: 40.7128, lng: -74.0060, status: "Lead" },
+      ];
+
+      accounts.forEach(acc => {
+        const marker = new google.maps.Marker({
+          position: { lat: acc.lat, lng: acc.lng },
+          map,
+          title: acc.name,
+          label: acc.status.charAt(0),
+        });
+
+        const info = new google.maps.InfoWindow({
+          content: `<strong>${acc.name}</strong><br>Status: ${acc.status}`
+        });
+
+        marker.addListener("click", () => {
+          info.open(map, marker);
+        });
+      });
+    }
+
+    window.onload = initMap;
+  </script>
+</head>
+<body>
+  <div id="map"></div>
+</body>
+</html>
